@@ -1,5 +1,6 @@
 from odoo import models,fields,api
 from dateutil.relativedelta import relativedelta
+from datetime import date
 
 class EstateProperty(models.Model):
     _name = 'estate.property'
@@ -65,3 +66,20 @@ class EstateProperty(models.Model):
         for record in self:
             record.total_area = record.living_area + record.garden_area
 
+    # using onchange field for garden and date availability
+    @api.onchange('garden')
+    def _onchange_garden(self):
+        for estate in self:
+            if not estate.garden:
+                estate.garden_area = 0
+
+
+    @api.onchange('date_availability')
+    def _onchange_date_availability(self):
+        for estate in self:
+            return{
+                "warning": {
+                    "title": "Warning",
+                    "message": "Availability date is in the past"
+                }
+            }
