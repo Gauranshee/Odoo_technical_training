@@ -260,6 +260,7 @@
             <xpath expr="//notebook" position="inside">
                 <page string="Properties">
                     <field name="property_ids"/>
+<!--                    lsdjflkjdslkglkdkgjdlkgjljgd-->
                     <tree>
                         <field name="name"/>
                         <field name="state"/>
