@@ -2,7 +2,7 @@
     "name": "Estatess",
     "version": "1.0",
     "license":"LGPL-3",
-    "depends":['base'],
+    "depends":['base','mail'],
     "application":True,
     'demo': ['demo/demo.xml',],
     "data":[
