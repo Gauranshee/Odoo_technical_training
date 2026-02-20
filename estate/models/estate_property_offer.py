@@ -46,7 +46,7 @@ class EstateOffer(models.Model):
 
     def action_refuse(self):
         self.ensure_one()
-        if "refused" in self.property_id.offer_ids.mapped('state'):
+        if self.state == "refused":
             raise UserError("Offer already refused")
         self.state= "refused"
         self.property_id.selling_price = 0

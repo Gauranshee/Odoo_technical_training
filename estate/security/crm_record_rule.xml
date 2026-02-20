@@ -1,0 +1,11 @@
+<odoo>
+    <data>
+        <record id="crm_lead_own_record_rules" model="ir.rule">
+            <field name="name">User can see only own CRM Leads</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="domain_force">[('create_uid','=',user.id)]</field>
+<!--            <field name="groups" eval="[(4, ref('crm.group_crm_user'))]"/>-->
+
+        </record>
+    </data>
+</odoo>
