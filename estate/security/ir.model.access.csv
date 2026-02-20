@@ -4,4 +4,6 @@ estate.access_estate_property_admin,access_estate_property_admin,estate.model_es
 estate.access_estate_property_type,access_estate_property_type,estate.model_estate_property_type,base.group_user,1,1,1,1
 estate.access_estate_property_offer,access_estate_property_offer,estate.model_estate_property_offer,base.group_user,1,1,1,1
 estate.access_estate_property_tag,access_estate_property_tag,estate.model_estate_property_tag,base.group_user,1,1,1,1
+access_estate_readonly,estate readonly,model_estate_property,estate.group_estate_readonly,1,0,0,0
+
 

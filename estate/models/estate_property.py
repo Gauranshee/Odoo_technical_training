@@ -1,7 +1,11 @@
+
+
 from odoo import models,fields,api
 from dateutil.relativedelta import relativedelta
 from datetime import date
 from odoo.exceptions import UserError, ValidationError
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class EstateProperty(models.Model):
@@ -31,7 +35,7 @@ class EstateProperty(models.Model):
     copy=False,
     default='new',)
 
-
+    seq_estate_property = fields.Char("Estate Code")
     name = fields.Char(string='Title',required=True)
     description = fields.Text(string='Description')
     best_price = fields.Float(string='Best Price',compute='_compute_best_price')
@@ -63,10 +67,13 @@ class EstateProperty(models.Model):
 
     salesperson_id = fields.Many2one('res.users',string='Salesperson')
 
-    # field computation
-    best_offer = fields.Float(string='Best Offer',compute='_compute_best_price')
-
     total_area = fields.Float(string='Total Area',compute='_compute_total_area')
+
+    user_id = fields.Many2one('res.users', string="Owner")
+
+    my_custom_field = fields.Char(string="Custom Info")
+
+    expiry_date = fields.Date(string="Expiry Date")
 
     @api.depends('living_area','garden_area')
     def _compute_total_area(self):
@@ -84,17 +91,19 @@ class EstateProperty(models.Model):
     @api.onchange('date_availability')
     def _onchange_date_availability(self):
         for estate in self:
-            return{
-                "warning": {
-                    "title": "Warning",
-                    "message": "Availability date is in the past"
+            if estate.date_availability and estate.date_availability < fields.Date.today():
+                return{
+                    "warning": {
+                        "title": "Warning",
+                        "message": "Availability date is in the past"
+                    }
                 }
-            }
 # adding button cancelled and sold to estate property
 
     def action_sold(self):
         if self.state == 'cancelled':
             raise UserError("Cancelled Properties cannot be sold")
+        _logger.info("Button action_sold triggered for record ID: %s", self.id)
         self.state = 'sold'
         return True
 
@@ -102,6 +111,8 @@ class EstateProperty(models.Model):
         if self.state == 'sold':
             raise UserError("Sold properties cannot be canceled")
         self.state = 'canceled'
+        if self.env.context.get('archive_on_cancel'):
+            self.active = False
         return True
 
    #--------- CONSTRAINTS CHAPTER---------
@@ -122,7 +133,28 @@ class EstateProperty(models.Model):
 
     def unlink(self):
         for record in self:
-            if record.state not in ('new','cancel'):
+            if record.state not in ('new', 'canceled'):
                 raise UserError('You cannot delete this property!')
-            return super().unlink()
+        return super().unlink()
+
+    @api.model
+    def create(self, vals):
+        print("Estate Property create vals",vals)
+        vals["seq_estate_property"]= self.env['ir.sequence'].next_by_code('estate.code')
+        return super(EstateProperty, self).create(vals)
+
+
+    # Create a cron job
+
+    def _cron_mark_expired_properties(self):
+        today = date.today()
+        properties = self.search([
+            ('expiry_date', '<', today),
+            ('state', '!=', 'sold')
+        ])
+        properties.write({'state': 'sold'})
+
+
+
+
 

@@ -4,4 +4,11 @@
             <field name="name">Estate Manager</field>
         </record>
     </data>
+    <odoo>
+    <record id="group_estate_readonly" model="res.groups">
+        <field name="name">Estate Read Only</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+</odoo>
+
 </odoo>

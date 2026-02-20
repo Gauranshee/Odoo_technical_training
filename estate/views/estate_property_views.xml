@@ -10,8 +10,11 @@
                         <field name="name"/>
                         <field name="state" widget="statusbar"/>
                         <field name="garden_orientation" widget="radio"/>
-                        <button name="action_sold" string="Sold" type="object" invisible="state in ['sold','cancel']"/>
-                        <button name="action_cancelled" string="Cancel" type="object" invisible="state in ['sold','cancel']"/>
+                        <button name="action_sold" string="Sold" type="object" invisible="state in ['sold','canceled']"/>
+                        <button name="action_cancelled" string="Cancel" type="object" invisible="state in ['sold','canceled']"/>
+                        <button name="action_cancelled" string="Cancel and Archive" type="object" context="{'archive_on_cancel':True}"/>
+                        <field name="state" widget="statusbar"/>
+                        <field name="seq_estate_property" nolable="1"/>
                     </h1>
                     <groups>
                         <group>
@@ -73,6 +76,7 @@
             <tree decoration-success="state == 'offer_received'"
             decoration-bf="state == 'offer_accepted'"
             decoration-muted="state == 'sold'">
+                <field name="seq_estate_property"/>
                 <field name="name" string="Title"/>
                 <field name="state" invisible="1"/>
                 <field name="postcode" string="Postcode"/>
@@ -100,7 +104,7 @@
                 <field name="postcode"/>
                 <field name="expected_price"/>
                 <field name="bedrooms"/>
-                <field name="living_area" filter_domain="[('living_area','>=',selfx)]"/>
+                <field name="living_area" filter_domain="[('living_area','>=',self)]"/>
                 <field name="facades"/>
                 <filter name="filter_new" string="New properties" domain="[('state','=','new')]"/>
                 <filter name="filter_offer_received" string="Offer Received" domain="[('state','=','offer_received')]"/>
@@ -139,15 +143,11 @@
         <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <header>
-                            <div class="oe_button_box" name="button_box">
-                                <button name="%(estate_property_offer_action)d" type="action" class="oe_stat_buttton" icon="fa-money">
-                                    <field name="offer_count" widget="statinfo"/>
-                                </button>
-                            </div>
-                        </header>
-                    </sheet>
-                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(estate_property_offer_action)s" type="action" class="oe_stat_button" icon="fa-money">
+                                <field name="offer_count" widget="statinfo"/>
+                            </button>
+                        </div>
                         <group>
                             <field name="name"/>
                         </group>
@@ -191,7 +191,7 @@
         <field name="arch" type="xml">
                 <tree editable="bottom"
                 decoration-danger="state == 'refused'"
-                decoration-success="state == 'state_accepted'">
+                decoration-success="state == 'accepted'">
                     <field name="property_id"/>
                     <field name="property_type_id"/>
                     <field name="price"/>
@@ -270,13 +270,28 @@
         </field>
     </record>
 
+    <record id="estate_rule_readonly_user" model="ir.rule">
+    <field name="name">User can see own properties only</field>
+    <field name="model_id" ref="model_estate_property"/>
+    <field name="groups" eval="[(4, ref('estate.group_estate_readonly'))]"/>
+    <field name="domain_force">[('user_id', '=', user.id)]</field>
+</record>
 
+<!--    ADDING A CUSTOM BUTTON-->
 
+<!--    <record id="view_property_form_inherit_custom" model="ir.ui.view">-->
+<!--    <field name="name">estate.property.form.inherit.custom</field>-->
+<!--        <field name="model">estate.property</field>-->
+<!--    <field name="inherit_id" ref="estate.estate_property_form_view"/>-->
+<!--    <field name="arch" type="xml">-->
+<!--        <xpath expr="//field[@name='name']" position="after">-->
+<!--            <field name="my_custom_field"/>-->
+<!--        </xpath>-->
+<!--    </field>-->
+<!--</record>-->
 
-
-
-
-
-
+<!--    we have used inherit_id= existing view lo extend karne ke liye-->
+<!--                  xpath= view ko specific location pr change karne ke liye-->
+<!--                 position="after" = name field ke baad add karna-->
 
 </odoo>

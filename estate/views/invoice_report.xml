@@ -1,0 +1,13 @@
+<odoo>
+    <template id="custom_invoice_report"
+              inherit_id="account.report_invoice_document">
+
+        <xpath expr="//t[@t-call='web.external_layout']" position="inside">
+            <p>
+                <strong>Custom Note:</strong>
+<!--                This invoice is generated from Estate System.-->
+            </p>
+        </xpath>
+
+    </template>
+</odoo>
