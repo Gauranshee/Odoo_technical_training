@@ -2,7 +2,12 @@ from odoo import models, fields
 
 class ResUsers(models.Model):
     _inherit = "res.users"
-    property_ids = fields.One2many('estate.property','salesperson_id', string='Properties',domain=[('state','=','new')])
-    # we have used _inherit bcz res.users already exists ,we extend it do NOT create new table..Tis is called CLASSICAL MODEL INHERITANCE
-    # One2many(target_model,inverse_field).....so estate_property=target model.....salesperson_id=inverse_field
-    # DOMAIN show only available properties
+    # One2many: links properties where this user is the salesperson.
+    # domain: only shows properties in 'New' state (available for sale).
+    # _inherit is used here because res.users already exists in Odoo core.
+    # Classical inheritance extends the existing model without creating a new database table.
+    property_ids = fields.One2many(
+        'estate.property', 'salesperson_id',
+        string='Properties',
+        domain=[('state', '=', 'new')]
+    )

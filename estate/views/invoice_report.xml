@@ -5,7 +5,7 @@
         <xpath expr="//t[@t-call='web.external_layout']" position="inside">
             <p>
                 <strong>Custom Note:</strong>
-<!--                This invoice is generated from Estate System.-->
+                This invoice is generated from Estate System.
             </p>
         </xpath>
 

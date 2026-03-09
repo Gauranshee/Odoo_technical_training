@@ -1,14 +1,26 @@
 <odoo>
     <data>
+
+        <!--
+            Estate Manager group.
+            Assigned to administrators who need full CRUD access on estate properties.
+            Referenced in ir.model.access.csv as 'estate.estate_admin'.
+        -->
         <record id="estate_admin" model="res.groups">
             <field name="name">Estate Manager</field>
         </record>
-    </data>
-    <odoo>
-    <record id="group_estate_readonly" model="res.groups">
-        <field name="name">Estate Read Only</field>
-        <field name="category_id" ref="base.module_category_hidden"/>
-    </record>
-</odoo>
 
+        <!--
+            Estate Read Only group.
+            Assigned to users who should only view estate records without modifying them.
+            category_id = base.module_category_hidden: hides this group from the
+            Settings > Users UI selector. It is assigned programmatically or via
+            the Technical menu only.
+        -->
+        <record id="group_estate_readonly" model="res.groups">
+            <field name="name">Estate Read Only</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+
+    </data>
 </odoo>

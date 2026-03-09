@@ -1,7 +1,0 @@
-<odoo>
-    <data>
-        <record id = "estate_property_demo_1" model = "estate.property">
-            <field name = "name">Demo Property</field>
-        </record>
-    </data>
-</odoo>
