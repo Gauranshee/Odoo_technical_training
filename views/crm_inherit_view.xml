@@ -1,0 +1,31 @@
+<odoo>
+    <record id="view_crm_lead_form_inherit_source_ref" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.source.ref</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="source_reference"/>
+            </xpath>
+
+        </field>
+</record>
+</odoo>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
