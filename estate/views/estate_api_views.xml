@@ -1,0 +1,75 @@
+<odoo>
+
+    <!--
+        Tree View (List View) for estate.api.data.
+        create="false" and delete="false": hides the Create and Delete buttons
+        because this data is managed entirely by the external API fetch process
+        and should not be modified manually by users.
+    -->
+    <record id="estate_api_data_tree" model="ir.ui.view">
+        <field name="name">estate.api.data.tree</field>
+        <field name="model">estate.api.data</field>
+        <field name="arch" type="xml">
+            <tree string="External API Data" create="false" delete="false">
+                <field name="post_id"      string="Post ID"/>
+                <field name="api_user_id"  string="User ID"/>
+                <field name="title"/>
+                <field name="fetch_date"   string="Fetched On"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--
+        Form View for estate.api.data.
+        create="false" and edit="false": this view is read-only.
+        The content originates from an external API and must not be edited manually.
+    -->
+    <record id="estate_api_data_form" model="ir.ui.view">
+        <field name="name">estate.api.data.form</field>
+        <field name="model">estate.api.data</field>
+        <field name="arch" type="xml">
+            <form string="API Record Detail" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group string="Post Metadata">
+                            <field name="post_id"/>
+                            <field name="api_user_id"/>
+                            <field name="fetch_date"/>
+                        </group>
+                        <group string="Title">
+                            <field name="title" nolabel="1"/>
+                        </group>
+                    </group>
+                    <group string="Content Body">
+                        <field name="body" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--
+        Window Action: defines what happens when the menu item is clicked.
+        ir.actions.act_window opens a model's records in the specified view modes.
+    -->
+    <record id="estate_api_data_action" model="ir.actions.act_window">
+        <field name="name">External API Data</field>
+        <field name="res_model">estate.api.data</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!--
+        Server Action: appears in the Action menu on the list view.
+        ir.actions.server with state="code" runs the specified Python expression.
+        binding_model_id makes this action appear in the Action dropdown of the model's views.
+        model.fetch_from_api() calls EstateApiData.fetch_from_api() as a model-level method.
+    -->
+    <record id="action_fetch_api_data" model="ir.actions.server">
+        <field name="name">Fetch from External API</field>
+        <field name="model_id" ref="model_estate_api_data"/>
+        <field name="state">code</field>
+        <field name="code">model.fetch_from_api()</field>
+        <field name="binding_model_id" ref="model_estate_api_data"/>
+    </record>
+
+</odoo>

@@ -15,7 +15,7 @@ class CrmLead(models.Model):
     @api.constrains('stage_id', 'source_reference')
     def _check_source_reference_when_won(self):
         for record in self:
-            # stage ko check kar rahe hain
+            # Validate that source_reference is filled when the lead reaches a Won stage.
             if record.stage_id.is_won and not record.source_reference:
                 raise ValidationError(
                     "Source Reference is mandatory when the lead is Won."

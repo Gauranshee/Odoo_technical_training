@@ -1,17 +1,15 @@
 from odoo import models, fields
 
-class SaleOrder(models.Model):
+
+class SaleOrderPropertyRef(models.Model):
+    """Extends sale.order with a property reference field for cross-module traceability."""
     _inherit = 'sale.order'
 
     property_reference = fields.Char(string="Property Reference")
 
+
 class StockPicking(models.Model):
+    """Extends stock.picking with a delivery note number for estate delivery documentation."""
     _inherit = 'stock.picking'
-    # extend existing inventory model
 
-    delivery_note = fields.Text(string="Delivery Note")
     delivery_note_no = fields.Char(string="Delivery Note No")
-
-
-
-
